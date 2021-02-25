@@ -24,7 +24,7 @@ if (isset($_SESSION["id_usuario"]))
 		$error='';
 		//para enviar la contraseña encriptada se usa el sha1
 		$sha1_pass = sha1($password);
-		$sql="SELECT id_usuario, nivel FROM usuarios WHERE nombre = '$usuario' AND password = '$password'";
+		$sql="SELECT id_usuario, nivel FROM usuarios WHERE nombre = '$usuario' AND password = '$sha1_pass'";
 		
 
 

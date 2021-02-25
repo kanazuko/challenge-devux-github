@@ -3,19 +3,19 @@
 	session_start();
 	include('conexion.php');
 
-	if (isset($_SESSION["id_usuario"])) {
+	if (!isset($_SESSION["id_usuario"])) {
 		header("location: index1.php");
 	}
-	if (isset($_SESSION["nivel"])) {
+	/*if (!isset($_SESSION["nivel"])) {
 		$nivel=$_SESSION["nivel"];
-	}
+	}*/
 
 
 	$sql="SELECT id_usuario, nivel FROM usuarios";
 	$result=$conexion->query($sql);
 
 	$bandera = false;
-
+	$nivel=0;
 	if (!empty($_POST)) 
 	{
 		//Codigo vulnerable
@@ -29,7 +29,7 @@
 
 		//CODIGO PROTEGIDO A XSS
 		$nombre = htmlspecialchars($_POST['nombre']);
-		$usuario = htmlspecialchars($_POST['usuario']);
+		$email = htmlspecialchars($_POST['email']);
 		$password = htmlspecialchars($_POST['password']);
 		$nivel = htmlspecialchars($_POST['nivel']);	
 		$sha1_pass = sha1($password);
@@ -43,7 +43,7 @@
 		if ($rows > 0){
 			$error = "El usuario ya existe";
 		}else{
-			$sqlUsuario = "INSERT INTO usuarios(nombre, password,email, nivel) VALUES('$usuario','$sha1_pass','$email','$nivel')";
+			$sqlUsuario = "INSERT INTO usuarios(nombre, password,email, nivel) VALUES('$nombre','$sha1_pass','$email','$nivel')";
 			$resultUsuario = $conexion->query($sqlUsuario);
 
 			if ($resultUsuario > 0) 
@@ -74,14 +74,14 @@
 			}else{ return true;}
 		}
 
-		/*function validarUsuario()
+		function validarUsuario()
 		{
 			valor = document.getElementById("usuario").value;
-			if(valor == null || valor.length == 0 || /^\s+$/.test(valor) ) {
-				alert('Falta Llenar Usuario');
+			if(valor == null || valor.length == 0) {
+				alert('Falta Llenar Email');
 				return false;
 			}else{ return true;}
-		}*/
+		}
 
 		function validarPassword()
 		{
@@ -110,7 +110,7 @@
 
 		function validar()
 		{
-			if (validarNombre() && validarUsuario() && validarPassword() && validarTipoUsuario())
+			if (validarNombre()&& validarPassword() && validarTipoUsuario())
 			{
 				document.registro.submit();
 			}
@@ -180,11 +180,11 @@
 <section>
 	<nav class="menu1">
 		<menu>
-			<?php if($_SESSION['nivel']==1) { ?>
+			<?php if($nivel==1) { echo'
 
           <li><a href="agregarusuarios.php">Registrar Empleado</a><br /><br /></li>
       
-          <?php } ?>
+       		';} ?>
           <li><a href="agregar.php">Agregar Producto</a><br /><br /></li>
           <li><a href="ubicacion.php">Ubicacion</a> </li>
           <li><a href="salir.php">Cerrar Sesi&oacute;n</a><br /><br /></li>
@@ -199,31 +199,30 @@
 		<!-- solo que acepte caracteres que le indique con el pattern -->
 			<br /><br />
 			<label>Nombre:</label>
-			<input id="nombre" type="text" name="nombre" required pattern="[A-Za-z0-9]{1,15}">
+			<input id="nombre" type="text" name="nombre" required pattern="[A-Za-z0-9]{1,303}">
 		</div><br />
 
 		<div>
-			<label>Usuario:</label>
-			<input id="usuario" type="text" name="usuario" required pattern="[A-Za-z0-9]{1,15}">
+			<label>Email:</label>
+			<input id="email" type="text" name="email" required pattern="[A-Za-z0-9\.]+@{1,40}">
 		</div><br />
 
 		<div>
 			<label>Password:</label>
-			<input id="password" type="password" name="password" required pattern="[A-Za-z0-9]{1,15}">
+			<input id="password" type="password" name="password" required pattern="[A-Za-z0-9]{1,20}">
 		</div><br />
 
 		<div>
 			<label>Confirmar Password:</label>
-			<input id="con_password" type="password" name="con_password" required pattern="[A-Za-z0-9]{1,15}">
+			<input id="con_password" type="password" name="con_password" required pattern="[A-Za-z0-9]{1,20}">
 		</div><br />
 
 		<div>
 			<label>Tipo Usuario:</label>
 			<select id="nivel" name="nivel">
 				<option value="0">Seleccione tipo de usuario...</option>
-				<?php while($row = $result->fetch_assoc()){ ?>
-					<option value="<?php echo $row['id_tipou']; ?>"><?php echo $row['tipo']; ?></option>
-				<?php }?>
+					<option value="1">usuario admin</option>
+					<option value="0">usuario standar</option>
 			</select>
 		</div><br />
 
