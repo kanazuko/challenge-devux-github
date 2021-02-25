@@ -21,9 +21,9 @@ if (isset($_POST['btnguardar']))
 	$autor=htmlspecialchars($_POST['txtautor']);
 	$cantidad=htmlspecialchars($_POST['txtcantidad']);
 
-	if (strlen($titulo)>30) 
+	if (strlen($titulo)>100) 
 	{
-		$error="Solo se permiten 30 caracteres maximo";
+		$error="Solo se permiten 100 caracteres maximo";
 	}else
 	{
 		if ($_POST['txtid']=="0") 
