@@ -6,8 +6,12 @@
 	if (isset($_SESSION["id_usuario"])) {
 		header("location: index1.php");
 	}
+	if (isset($_SESSION["nivel"])) {
+		$nivel=$_SESSION["nivel"];
+	}
 
-	$sql="SELECT id_tipou, tipo FROM tipo_usuario";
+
+	$sql="SELECT id_usuario, nivel FROM usuarios";
 	$result=$conexion->query($sql);
 
 	$bandera = false;
@@ -19,7 +23,7 @@
 		$nombre = $_POST['nombre'];
 		$usuario = $_POST['usuario'];
 		$password = $_POST['password'];
-		$tipo_usuario = $_POST['tipo_usuario'];	
+		$nivel = $_POST['nivel'];	
 		$sha1_pass = sha1($password);
 		*/
 
@@ -27,23 +31,19 @@
 		$nombre = htmlspecialchars($_POST['nombre']);
 		$usuario = htmlspecialchars($_POST['usuario']);
 		$password = htmlspecialchars($_POST['password']);
-		$tipo_usuario = $_POST['tipo_usuario'];	
+		$nivel = htmlspecialchars($_POST['nivel']);	
 		$sha1_pass = sha1($password);
 
 		$error = '';
 
-		$sqlUser = "SELECT id_usuario FROM usuarios WHERE usuario = '$usuario'";
+		$sqlUser = "SELECT id_usuario FROM usuarios WHERE nombre = '$nombre'";
 		$resultUser=$conexion->query($sqlUser);
 		$rows = $resultUser->num_rows;
 
 		if ($rows > 0){
 			$error = "El usuario ya existe";
 		}else{
-			$sqlPerson = "INSERT INTO personal (nombre) VALUES ('$nombre')";
-			$resultPerson = $conexion->query($sqlPerson);
-			$idPersona = $conexion->insert_id;
-
-			$sqlUsuario = "INSERT INTO usuarios(usuario, password, idpersonal, idtipou) VALUES('$usuario','$sha1_pass','$idPersona','$tipo_usuario')";
+			$sqlUsuario = "INSERT INTO usuarios(nombre, password,email, nivel) VALUES('$usuario','$sha1_pass','$email','$nivel')";
 			$resultUsuario = $conexion->query($sqlUsuario);
 
 			if ($resultUsuario > 0) 
@@ -74,14 +74,14 @@
 			}else{ return true;}
 		}
 
-		function validarUsuario()
+		/*function validarUsuario()
 		{
 			valor = document.getElementById("usuario").value;
 			if(valor == null || valor.length == 0 || /^\s+$/.test(valor) ) {
 				alert('Falta Llenar Usuario');
 				return false;
 			}else{ return true;}
-		}
+		}*/
 
 		function validarPassword()
 		{
@@ -94,14 +94,14 @@
 				if (valor == valor2) 
 					{
 						return true;
-					}else{ alert('Las contraselas no coinciden'); return false;}
+					}else{ alert('Las contraseñas no coinciden'); return false;}
 
 			}
 		}
 
 		function validarTipoUsuario()
 		{
-			indice = document.getElementById("tipo_usuario").value;
+			indice = document.getElementById("nivel").value;
 			if(indice == null || indice==0) {
 				alert('Seleccione tipo de usuario');
 				return false;
@@ -180,7 +180,7 @@
 <section>
 	<nav class="menu1">
 		<menu>
-			<?php if($_SESSION['tipo_usuario']==1) { ?>
+			<?php if($_SESSION['nivel']==1) { ?>
 
           <li><a href="agregarusuarios.php">Registrar Empleado</a><br /><br /></li>
       
@@ -219,7 +219,7 @@
 
 		<div>
 			<label>Tipo Usuario:</label>
-			<select id="tipo_usuario" name="tipo_usuario">
+			<select id="nivel" name="nivel">
 				<option value="0">Seleccione tipo de usuario...</option>
 				<?php while($row = $result->fetch_assoc()){ ?>
 					<option value="<?php echo $row['id_tipou']; ?>"><?php echo $row['tipo']; ?></option>
