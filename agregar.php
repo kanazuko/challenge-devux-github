@@ -178,15 +178,15 @@ if (isset($_GET['deleted']))
 			<tr>
 				<br /><td>Titulo</td>
 
-				<td> <input type="text" name="txttitulo" value="<?php echo $titulo; ?>" required pattern="[A-Za-z0-9 ]{1,30}"> <input type="hidden" name="txtid" value="<?php echo $id_libro; ?>" /> </td>
+				<td> <input type="text" name="txttitulo" value="<?php echo $titulo; ?>" required pattern="[A-Za-z0-9 \.]{1,30}"> <input type="hidden" name="txtid" value="<?php echo $id_libro; ?>" /> </td>
 			</tr>
 			<tr>
 				<td>Autor</td>
-				<td> <input type="text" name="txtautor" value="<?php echo $autor; ?>" required pattern="[A-Za-z0-9 ]{1,30}"> </td>
+				<td> <input type="text" name="txtautor" value="<?php echo $autor; ?>" required pattern="[A-Za-z0-9 \.]{1,30}"> </td>
 			</tr>
 			<tr>
 				<td>Cantidad</td>
-				<td> <input type="text" name="txtcantidad" value="<?php echo $cantidad; ?>" required pattern="[A-Za-z0-9 ]{1,15}"> </td>
+				<td> <input type="text" name="txtcantidad" value="<?php echo $cantidad; ?>" required pattern="[0-9]{1,15}"> </td>
 			</tr>
 			<tr>
 				<td></td>
