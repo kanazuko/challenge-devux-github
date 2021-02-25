@@ -1,8 +1,8 @@
 <?php
-$host = "127.0.0.1";
-$user = "root";
-$password = "";
-$database = "challenge";
+$host = "z5zm8hebixwywy9d.cbetxkdyhwsb.us-east-1.rds.amazonaws.com";
+$user = "z1libq0tpk9rz8sv";
+$password = "udk4zdfeyh5m50cv";
+$database = "qqjlv5512bb91fm3";
 
 try {
 	$conexion=mysqli_connect($host,$user, $password,$database);
