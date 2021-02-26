@@ -7,6 +7,8 @@ include('conexion.php');
   if (!isset($_SESSION["id_usuario"])) 
   {
     header("location: index.php");
+  }else{
+    $id_usuario=$_SESSION["id_usuario"];
   }
 
 ?>
@@ -19,7 +21,7 @@ include('conexion.php');
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>Base de Datos</title>
+    <title>Librería</title>
 
     <!-- Bootstrap -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -80,49 +82,52 @@ include('conexion.php');
       <p><br/></p>
       <div class="container">
         
-        <h1>Productos</h1>
+        <h1>Mis libros Prestados</h1>
 
         <table class="table table-striped table-bordered table-hover" id="mydata">
           <thead>
             <tr>
-              <th>ID</th>
+              <th>ID Libro</th>
               <th>Título</th>
               <th>Autor</th>
-              <th>Categoría</th>
-              <th>Fecha de publicación</th>
-              <th>Disponibles</th>
+              <th>Nombre del solicitante</th>
+              <th>En posesión</th>
             </tr>
           </thead>
           <tbody>
 
           <?php
-            $sql="SELECT * FROM libros";
-
+            $sql="SELECT * FROM prestamo WHERE prestamo.id_usuario=$id_usuario";
             $query=mysqli_query($conexion, $sql);
 
               if (mysqli_num_rows($query)>0)
               {
-
-                while ($row=mysqli_fetch_object($query))
-              {
-        
-                ?>
-              <tr <?php if($row->cantidad==0) {echo 'style="background-color:#FF0000"';}?>>
-                <td> <?php echo $row->id_libro; ?></td>
-                <td> <?php echo $row->titulo; ?></td>
-                <td> <?php echo $row->autor; ?></td>
-                <td> <?php echo $row->categoria; ?></td>
-                <td> <?php echo $row->fecha_pub; ?></td>
-                <td> <?php if($row->cantidad==0) {echo 'LIBRO NO DISPONIBLE';}else{echo $row->cantidad;} ?></td>
-                <td>
-                  <a href="agregar.php?edited=1&id_libro=<?php echo $row->id_libro; ?>">Editar</a> |
-                  <a href="agregar.php?deleted=1&id_libro=<?php echo $row->id_libro; ?>">Eliminar</a>
-                  <?php if($row->cantidad>0) {echo '<a href="agregar.php?borrow=1&id_libro='.$row->id_libro.'">Pedir Prestado</a>';}?>
-                </td>
-
-              </tr>
-          <?php
-              }
+                while($row=mysqli_fetch_object($query))
+                {
+                  $sql="SELECT * FROM prestamo,usuarios,libros WHERE prestamo.id_usuario=$row->id_usuario AND libros.id_libro=$row->id_libro AND prestamo.id_libro=$row->id_libro AND usuarios.id_usuario=$row->id_usuario;";
+                  $query2=mysqli_query($conexion, $sql);
+                  if ($row2=mysqli_fetch_object($query2))
+                  {
+                    $activo=$row->activo;
+                    $id_prestamo=$row2->id_prestamo;
+                    $id_libro=$row2->id_libro;
+                    ?>
+                    <tr>
+                      <td> <?php echo $row2->id_libro; ?></td>
+                      <td> <?php echo $row2->titulo; ?></td>
+                      <td> <?php echo $row2->autor; ?></td>
+                      <td> <?php echo $row2->nombre; ?></td>
+                      <td> <?php if($activo!=1) {echo "libro regresado";}else echo "en posesion";?></td>
+                      <?php if($activo==1){echo "
+                        <td>
+                        <a href='agregar.php?regreso=1&id_prestamo=$id_prestamo;&id_libro=$id_libro;'>Regresar libro</a>
+                      </td>
+                    </tr>
+                      "; }?>
+                      
+                    <?php
+                  }
+                }
              }
           ?>
             

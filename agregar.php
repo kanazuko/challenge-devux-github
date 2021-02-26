@@ -19,6 +19,7 @@ if (isset($_POST['btnguardar']))
 
 	$titulo=htmlspecialchars($_POST['txttitulo']);
 	$autor=htmlspecialchars($_POST['txtautor']);
+	$categoria=htmlspecialchars($_POST['txtcategoria']);
 	$cantidad=htmlspecialchars($_POST['txtcantidad']);
 
 	if (strlen($titulo)>100) 
@@ -72,6 +73,44 @@ if (isset($_GET['deleted']))
 	{
 		header('Refresh:0; index1.php');
 	}
+}
+//prestamo de libro
+if (isset($_GET['borrow'])) 
+{
+	$id_libro=$_GET['id_libro'];
+	$id_usuario=$_SESSION['id_usuario'];
+	$sql="INSERT INTO prestamo (id_libro,id_usuario,activo) VALUES ('$id_libro','$id_usuario','1')";
+		$resultUsuario = $conexion->query($sql);
+
+		if ($resultUsuario > 0) 
+		{
+			$sql="UPDATE `libros` SET `cantidad`=cantidad-1 WHERE `id_libro`=$id_libro";
+			$query=mysqli_query($conexion, $sql);
+			if ($query) 
+			header('Refresh:0; index1.php');
+		}else
+		{
+			$error = "Error al Registrar";
+		}
+}
+if (isset($_GET['regreso'])) 
+{
+	$id_prestamo=$_GET['id_prestamo'];
+	$id_libro=$_GET['id_libro'];
+	$id_usuario=$_SESSION['id_usuario'];
+	$sql="UPDATE `prestamo` SET `activo`=0 WHERE `id_prestamo`=$id_prestamo";
+	$query=mysqli_query($conexion, $sql);
+		if ($query){
+			$sql="UPDATE `libros` SET `cantidad`=cantidad+1 WHERE `id_libro`=$id_libro";
+			$query=mysqli_query($conexion, $sql);
+			if ($query){
+				header('Refresh:0; index1.php');
+			}
+			else
+			{
+				$error = "Error al Regresar libro";
+			}
+		}
 }
 
 ?>
@@ -144,24 +183,24 @@ if (isset($_GET['deleted']))
 </head>
 
 <body>
+	<?php 	
+		if($_SESSION["tipo_usuario"]!=1)
+		header("location: index1.php");
+	?>
 
 <section>
 
 	<nav class="menu2">
 		<menu>
+          <?php if($_SESSION['tipo_usuario']==1) { ?>
 
-
-			<?php
-				//verifica si el usuario tiene acceso administrativo para poder agregar usuarios
-				if($_SESSION['tipo_usuario']==1) { ?>
-
-          		<li><a href="agregarusuarios.php">Registrar Usuario</a><br /><br /></li>
-      
-          	<?php } ?>
+          <li><a href="agregarusuarios.php">Registrar Usuario</a><br /><br /></li>
           <li><a href="agregar.php">Agregar Libro</a><br /><br /></li>
-          <li><a href="ubicacion.php">Ubicacion</a> </li>
+          <?php } ?>
+          <li><a href="index1.php">Libros Disponibles</a> </li>
+          <li><a href="misprestamos.php">Mis Prestamos</a> </li>
           <li><a href="salir.php">Cerrar Sesi&oacute;n</a><br /><br /></li>
-		</menu>
+        </menu>
 		
 	</nav>
 
