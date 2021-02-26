@@ -1,0 +1,47 @@
+<style>
+
+		*{
+			margin: 0px;
+			padding: 0px;
+		}
+
+		body{
+			background: url(fondo3.jpg);
+			background-size: 100vw 100vh;
+			background-attachment: fixed;
+		}
+
+		form{
+			background: #E3F6CE;
+			border: 3px solid #31B404;
+			margin: 30px auto;
+		}
+		form h1{
+			text-align: center;
+			font-weight: normal;
+			color: #31B404;
+			font-size: 30pt;
+			margin: 0;
+		}
+
+		a{
+	        color: #000;
+	        padding: 5px 5px;
+	        font-size: 18;
+	     }
+	     a:active{
+	        background: #2EFE64;
+	     }
+
+		nav.menu1{
+			width: 890px;
+			height: 50px;
+        	margin: 0;
+       		padding: 0;
+      	}
+      	nav.menu1 li{
+       		display: block;
+        	float: left;
+        	padding: 0 10px;
+      	}
+	</style>

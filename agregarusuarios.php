@@ -133,7 +133,7 @@
 
 		form{
 			background: #E3F6CE;
-			width: 380px;
+			width: 500px;
 			border: 3px solid #31B404;
 			margin: 30px auto;
 			padding: 40px 30px; 
@@ -147,7 +147,7 @@
 			margin: 0;
 		}
 		form input{
-			width: 200px;
+			width: 150px;
 			height: 25px;
 			margin: 10px 30px;
 		}
@@ -191,7 +191,7 @@
 		</menu>
 		
 	</nav>
-
+	<div><h1>Solo usuarios administradores pueden agregar nuevos usuarios</h1></div>
 	<form id="registro" name="registro" action="<?php htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="POST">
 		<div>
 
