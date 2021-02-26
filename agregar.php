@@ -12,6 +12,7 @@ $error="";
 $id_libro="0";
 $titulo="";
 $autor="";
+$categoria="";
 $cantidad="";
 
 if (isset($_POST['btnguardar'])) 
@@ -29,7 +30,7 @@ if (isset($_POST['btnguardar']))
 	{
 		if ($_POST['txtid']=="0") 
 		{
-			$sql = "INSERT INTO `libros`(`titulo`, `autor`, `cantidad`) VALUES ('$titulo','$autor','$cantidad')";
+			$sql = "INSERT INTO `libros`(`titulo`, `autor`, `categoria`,`cantidad`) VALUES ('$titulo','$autor','$categoria','$cantidad')";
 			$query=mysqli_query($conexion, $sql);
 			if ($query) 
 			{
@@ -222,6 +223,10 @@ if (isset($_GET['regreso']))
 			<tr>
 				<td>Autor</td>
 				<td> <input type="text" name="txtautor" value="<?php echo $autor; ?>" required pattern="[A-Za-z0-9 \.]{1,50}"> </td>
+			</tr>
+			<tr>
+				<td>Categoría</td>
+				<td> <input type="text" name="txtcategoria" value="<?php echo $categoria; ?>" required pattern="[A-Za-z0-9 \.]{1,50}"> </td>
 			</tr>
 			<tr>
 				<td>Cantidad</td>
